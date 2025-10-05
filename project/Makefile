@@ -1,5 +1,6 @@
 FRONTEND=frontend-service
 BROKER=broker-service
+AUTH=auth-service
 
 ## up: starts all containers without forcing build
 up:
@@ -39,3 +40,7 @@ restart_front:
 ## restart_broker: restart only the broker
 restart_broker:
 	docker-compose restart $(BROKER)
+
+## restart_auth: restart only the auth
+restart_auth:
+	docker-compose restart $(AUTH)

@@ -30,3 +30,31 @@ go.work.sum
 # Editor/IDE
 # .idea/
 # .vscode/
+
+# Ignore PostgreSQL data folder (adjust path as needed)
+db-data/
+postgres-data/
+data/postgres/
+pgdata/
+
+# Ignore PostgreSQL log files
+*.log
+
+# Ignore Postgres WAL and temporary files 
+pg_wal/
+pg_xlog/
+pg_stat_tmp/
+pg_tblspc/
+pg_snapshots/
+pg_subtrans/
+pg_notify/
+pg_replslot/
+pg_ident_tmp/
+
+# Ignore tmp and backup files related to postgres
+*.backup
+*.dump
+*.sql
+
+# Ignore Docker volume directories for Postgres
+docker/volumes/postgres_data/
