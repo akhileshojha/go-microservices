@@ -1,7 +1,6 @@
 package main
 
 import (
-	"encoding/json"
 	"net/http"
 
 	"github.com/go-chi/chi/v5"
@@ -11,6 +10,8 @@ import (
 
 func (app *Config) routes() http.Handler {
 	mux := chi.NewRouter()
+
+	// specify who is allowed to connect
 	mux.Use(cors.Handler(cors.Options{
 		AllowedOrigins:   []string{"https://*", "http://*"},
 		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
@@ -19,15 +20,12 @@ func (app *Config) routes() http.Handler {
 		AllowCredentials: true,
 		MaxAge:           300,
 	}))
+
 	mux.Use(middleware.Heartbeat("/ping"))
+
 	mux.Post("/broker", app.Broker)
-	mux.NotFound(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		w.Header().Set("Content-Type", "application/json")
-		w.WriteHeader(http.StatusNotFound)
-		json.NewEncoder(w).Encode(map[string]string{
-			"error":   "true",
-			"message": "endpoint not found",
-		})
-	}))
+
+	mux.Post("/handle", app.HandleSubmission)
+
 	return mux
 }

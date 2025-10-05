@@ -2,38 +2,27 @@ package main
 
 import (
 	// "encoding/json"
+	"fmt"
 	"log"
 	"net/http"
 )
 
-type BrokerResponse struct {
-	Status  string `json:"status"`
-	Message string `json:"message"`
-}
+const webPort = "80"
 
 func main() {
 	app := Config{}
 
-	http.HandleFunc("/broker", app.Broker)
+	log.Printf("Starting broker service on port %s\n", webPort)
 
-	log.Println("Broker service listening on port 80")
-	err := http.ListenAndServe(":80", nil)
+	// define http server
+	srv := &http.Server{
+		Addr:    fmt.Sprintf(":%s", webPort),
+		Handler: app.routes(),
+	}
+
+	// start the server
+	err := srv.ListenAndServe()
 	if err != nil {
-		log.Fatal(err)
+		log.Panic(err)
 	}
 }
-
-// func brokerHandler(w http.ResponseWriter, r *http.Request) {
-// 	if r.Method != http.MethodPost {
-// 		http.Error(w, "Method Not Allowed", http.StatusMethodNotAllowed)
-// 		return
-// 	}
-
-// 	resp := BrokerResponse{
-// 		Status:  "success",
-// 		Message: "Broker service is alive!",
-// 	}
-
-// 	w.Header().Set("Content-Type", "application/json")
-// 	json.NewEncoder(w).Encode(resp)
-// }
